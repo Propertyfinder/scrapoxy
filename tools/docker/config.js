@@ -50,9 +50,15 @@ module.exports = {
             instance: {
                 InstanceType: process.env.PROVIDERS_AWSEC2_INSTANCE_INSTANCETYPE || 't1.micro',
                 ImageId: process.env.PROVIDERS_AWSEC2_INSTANCE_IMAGEID || 'ami-c74d0db4',
-                SecurityGroups: [
-                    process.env.PROVIDERS_AWSEC2_INSTANCE_SECURITYGROUPS || 'forward-proxy'
-                ],
+                NetworkInterfaces: [{
+                    AssociatePublicIpAddress: true,
+                    DeleteOnTermination: true,
+                    SubnetId: process.env.PROVIDERS_AWSEC2_INSTANCE_SUBNETID || null, 
+                    Groups: [
+                        process.env.PROVIDERS_AWSEC2_INSTANCE_SECURITYGROUPIDS || ''
+                    ],
+                    DeviceIndex: 0
+                }]
             },
             tag: process.env.PROVIDERS_AWSEC2_TAG || 'Proxy',
             maxRunningInstances: parseInt(process.env.PROVIDERS_AWSEC2_MAXRUNNINGINSTANCES || '10'),
